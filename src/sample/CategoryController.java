@@ -94,24 +94,6 @@ public class CategoryController implements Initializable {
 
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resource) {
-        showTable();
-
-        TableColumn idCol = new TableColumn("ID");
-        idCol.setMinWidth(100);
-        idCol.setCellValueFactory(
-                new PropertyValueFactory<ModelTableCat, String>("id"));
-
-        TableColumn catCol = new TableColumn("Category");
-        catCol.setMinWidth(250);
-        catCol.setCellValueFactory(
-                new PropertyValueFactory<ModelTableCat, String>("category"));
-        catTable.setItems(oblist);
-        catTable.getColumns().addAll(idCol, catCol);
-
-    }
-
     public void showTable() {
         try {
             PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM category");
@@ -178,6 +160,24 @@ public class CategoryController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resource) {
+        showTable();
+
+        TableColumn idCol = new TableColumn("ID");
+        idCol.setMinWidth(100);
+        idCol.setCellValueFactory(
+                new PropertyValueFactory<ModelTableCat, String>("id"));
+
+        TableColumn catCol = new TableColumn("Category");
+        catCol.setMinWidth(250);
+        catCol.setCellValueFactory(
+                new PropertyValueFactory<ModelTableCat, String>("category"));
+        catTable.setItems(oblist);
+        catTable.getColumns().addAll(idCol, catCol);
+
     }
 
 }

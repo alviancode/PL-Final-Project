@@ -22,7 +22,7 @@
             </font>
         </Label>
         <TextField fx:id="brandField" layoutX="135.0" layoutY="218.0" promptText="Less Than 15 Character"/>
-        <Button fx:id="addButton" layoutX="97.0" layoutY="320.0" mnemonicParsing="false" onAction="#addBrand"
+        <Button fx:id="addButton" layoutX="97.0" layoutY="320.0" mnemonicParsing="false" onAction="#addButton"
                 prefHeight="26.0" prefWidth="70.0" text="Add"/>
         <Button fx:id="delButton" layoutX="213.0" layoutY="320.0" mnemonicParsing="false" onAction="#deleteButton"
                 prefHeight="26.0" prefWidth="70.0" text="Delete"/>

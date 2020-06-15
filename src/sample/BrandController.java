@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -32,7 +33,7 @@ public class BrandController implements Initializable {
         return idField.getText();
     }
 
-    public void addBrand() {
+    public void addButton() {
         try {
             if (getBrandField().isEmpty() || getIdField().isEmpty()) {
                 Alert a = new Alert(Alert.AlertType.WARNING);
@@ -96,24 +97,6 @@ public class BrandController implements Initializable {
 
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resource) {
-        showTable();
-
-        TableColumn idCol = new TableColumn("First Name");
-        idCol.setMinWidth(100);
-        idCol.setCellValueFactory(
-                new PropertyValueFactory<ModelTableBrand, String>("id"));
-
-        TableColumn catCol = new TableColumn("Brand");
-        catCol.setMinWidth(250);
-        catCol.setCellValueFactory(
-                new PropertyValueFactory<ModelTableBrand, String>("brand"));
-        brandTable.setItems(oblist);
-        brandTable.getColumns().addAll(idCol, catCol);
-
-    }
-
     public void showTable() {
         try {
             PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM brand");
@@ -133,8 +116,6 @@ public class BrandController implements Initializable {
         idField.setText(ID);
         String Brand = brand.getBrand();
         brandField.setText(Brand);
-
-
     }
 
     public boolean isUsed(){
@@ -185,4 +166,21 @@ public class BrandController implements Initializable {
         }
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resource) {
+        showTable();
+
+        TableColumn idCol = new TableColumn("First Name");
+        idCol.setMinWidth(100);
+        idCol.setCellValueFactory(
+                new PropertyValueFactory<ModelTableBrand, String>("id"));
+
+        TableColumn catCol = new TableColumn("Brand");
+        catCol.setMinWidth(250);
+        catCol.setCellValueFactory(
+                new PropertyValueFactory<ModelTableBrand, String>("brand"));
+        brandTable.setItems(oblist);
+        brandTable.getColumns().addAll(idCol, catCol);
+
+    }
 }

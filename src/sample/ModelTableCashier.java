@@ -1,6 +1,6 @@
 package sample;
 
-public class ModelTableCashier {
+public class ModelTableCashier{
     String id, barcode, product, qty, total;
 
     public ModelTableCashier(String id, String barcode, String product, String qty, String total) {

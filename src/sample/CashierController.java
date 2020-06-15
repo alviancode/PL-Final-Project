@@ -18,15 +18,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class CashierController implements Initializable {
+public class CashierController extends ProductController implements Initializable {
     Connection connect = new Connection();
     public TextField barcodeField, prodField, priceField, qtyField, totalField, changeField, payField;
     public Button addButton, delButton;
     ObservableList<ModelTableCashier> oblist = FXCollections.observableArrayList();
     int ID;
     int id;
-    int subTotal = 0;
-    int change = 0;
+    long subTotal = 0;
+    long change = 0;
 
     @FXML
     private TableView<ModelTableCashier> cashierTable;

@@ -7,7 +7,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.math.BigInteger;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -65,74 +64,6 @@ public class ProductController implements Initializable {
     public String getBarcode() {
         return barcodeField.getText();
     }
-
-    public void setDB() {
-        try {
-            PreparedStatement prepStat = connect.getPrepStat("INSERT INTO product VALUES(?, ?, ?, ?, ?, ?,?)");
-            prepStat.setString(1, getProd());
-            prepStat.setString(2, getDesc());
-            prepStat.setString(3, getCatCombo());
-            prepStat.setString(4, getBrandCombo());
-            prepStat.setString(5, getQty());
-            prepStat.setString(6, getRetailPrice());
-            prepStat.setString(7, getBarcode());
-
-            prepStat.executeUpdate();
-            Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
-            alert1.setTitle("Info");
-            alert1.setContentText("Success add new category!");
-            alert1.setHeaderText("SUCCESS");
-            alert1.show();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resource) {
-        showTable();
-
-        TableColumn prodCol = new TableColumn("Product");
-        prodCol.setMinWidth(100);
-        prodCol.setCellValueFactory(
-                new PropertyValueFactory<ModelTableProd, String>("product"));
-
-        TableColumn descCol = new TableColumn("Description");
-        descCol.setMinWidth(180);
-        descCol.setCellValueFactory(
-                new PropertyValueFactory<ModelTableProd, String>("desc"));
-
-        TableColumn catCol = new TableColumn("Category");
-        catCol.setMinWidth(100);
-        catCol.setCellValueFactory(
-                new PropertyValueFactory<ModelTableProd, String>("category"));
-
-        TableColumn brandCol = new TableColumn("Brand");
-        brandCol.setMinWidth(100);
-        brandCol.setCellValueFactory(
-                new PropertyValueFactory<ModelTableProd, String>("brand"));
-
-        TableColumn priceCol = new TableColumn("Price");
-        priceCol.setMinWidth(100);
-        priceCol.setCellValueFactory(
-                new PropertyValueFactory<ModelTableProd, String>("price"));
-
-        TableColumn qtyCol = new TableColumn("Qty");
-        qtyCol.setMinWidth(50);
-        qtyCol.setCellValueFactory(
-                new PropertyValueFactory<ModelTableProd, String>("qty"));
-
-        TableColumn barcodeCol = new TableColumn("Barcode");
-        barcodeCol.setMinWidth(100);
-        barcodeCol.setCellValueFactory(
-                new PropertyValueFactory<ModelTableProd, String>("barcode"));
-
-        prodTable.setItems(oblist);
-        prodTable.getColumns().addAll(prodCol, descCol, catCol, brandCol, qtyCol, priceCol, barcodeCol);
-
-    }
-
 
     public void showTable() {
         try {
@@ -255,6 +186,41 @@ public class ProductController implements Initializable {
         barcodeField.setText(product.getBarcode());
     }
 
+    public void setDB() {
+        try {
+            PreparedStatement prepStat = connect.getPrepStat("INSERT INTO product VALUES(?, ?, ?, ?, ?, ?,?)");
+            prepStat.setString(1, getProd());
+            prepStat.setString(2, getDesc());
+            prepStat.setString(3, getCatCombo());
+            prepStat.setString(4, getBrandCombo());
+            prepStat.setString(5, getQty());
+            prepStat.setString(6, getRetailPrice());
+            prepStat.setString(7, getBarcode());
+
+            prepStat.executeUpdate();
+            Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
+            alert1.setTitle("Info");
+            alert1.setContentText("Success add new category!");
+            alert1.setHeaderText("SUCCESS");
+            alert1.show();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean dataBaseCheck() {
+        PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM product WHERE Barcode='" + getBarcode() + "'");
+        try {
+            ResultSet rs = prepStat.executeQuery();
+            return rs.next();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
 
     public void deleteProduct() {
         try {
@@ -278,19 +244,6 @@ public class ProductController implements Initializable {
         }
     }
 
-    public boolean dataBaseCheck() {
-        PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM product WHERE Barcode='" + getBarcode() + "'");
-        try {
-            ResultSet rs = prepStat.executeQuery();
-            return rs.next();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-    }
-
     public void clearField() {
         prodField.setText("");
         priceField.setText("");
@@ -299,5 +252,49 @@ public class ProductController implements Initializable {
         descArea.setText("");
         catCombo.setValue("");
         brandCombo.setValue("");
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resource) {
+        showTable();
+
+        TableColumn prodCol = new TableColumn("Product");
+        prodCol.setMinWidth(100);
+        prodCol.setCellValueFactory(
+                new PropertyValueFactory<ModelTableProd, String>("product"));
+
+        TableColumn descCol = new TableColumn("Description");
+        descCol.setMinWidth(180);
+        descCol.setCellValueFactory(
+                new PropertyValueFactory<ModelTableProd, String>("desc"));
+
+        TableColumn catCol = new TableColumn("Category");
+        catCol.setMinWidth(100);
+        catCol.setCellValueFactory(
+                new PropertyValueFactory<ModelTableProd, String>("category"));
+
+        TableColumn brandCol = new TableColumn("Brand");
+        brandCol.setMinWidth(100);
+        brandCol.setCellValueFactory(
+                new PropertyValueFactory<ModelTableProd, String>("brand"));
+
+        TableColumn priceCol = new TableColumn("Price");
+        priceCol.setMinWidth(100);
+        priceCol.setCellValueFactory(
+                new PropertyValueFactory<ModelTableProd, String>("price"));
+
+        TableColumn qtyCol = new TableColumn("Qty");
+        qtyCol.setMinWidth(50);
+        qtyCol.setCellValueFactory(
+                new PropertyValueFactory<ModelTableProd, String>("qty"));
+
+        TableColumn barcodeCol = new TableColumn("Barcode");
+        barcodeCol.setMinWidth(100);
+        barcodeCol.setCellValueFactory(
+                new PropertyValueFactory<ModelTableProd, String>("barcode"));
+
+        prodTable.setItems(oblist);
+        prodTable.getColumns().addAll(prodCol, descCol, catCol, brandCol, qtyCol, priceCol, barcodeCol);
+
     }
 }
