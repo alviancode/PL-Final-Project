@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+            prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="sample.BrandController">
+    <children>
+        <TableView fx:id="brandTable" layoutX="400.0" layoutY="130.0" onMouseClicked="#getVal" prefHeight="450.0"
+                   prefWidth="350.0"/>
+        <Label alignment="CENTER" layoutX="285.0" layoutY="14.0" prefHeight="70.0" prefWidth="230.0" text="Brand"
+               textAlignment="CENTER">
+            <font>
+                <Font name="System Bold" size="38.0"/>
+            </font>
+        </Label>
+        <Label alignment="CENTER" layoutX="57.0" layoutY="221.0" text="Brand">
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </Label>
+        <TextField fx:id="brandField" layoutX="135.0" layoutY="218.0" promptText="Less Than 15 Character"/>
+        <Button fx:id="addButton" layoutX="97.0" layoutY="320.0" mnemonicParsing="false" onAction="#addBrand"
+                prefHeight="26.0" prefWidth="70.0" text="Add"/>
+        <Button fx:id="delButton" layoutX="213.0" layoutY="320.0" mnemonicParsing="false" onAction="#deleteButton"
+                prefHeight="26.0" prefWidth="70.0" text="Delete"/>
+        <TextField fx:id="idField" layoutX="135.0" layoutY="268.0" promptText="Input 4 Numbers"/>
+        <Label alignment="CENTER" layoutX="57.0" layoutY="271.0" text="ID">
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </Label>
+    </children>
+</AnchorPane>
