@@ -25,11 +25,11 @@ public class BrandController implements Initializable {
     private TableView<ModelTableBrand> brandTable;
 
 
-    public String getBrandField(){
+    public String getBrandField() {
         return brandField.getText();
     }
 
-    public String getIdField(){
+    public String getIdField() {
         return idField.getText();
     }
 
@@ -44,13 +44,13 @@ public class BrandController implements Initializable {
             } else {
 
                 if (getBrandField().length() <= 15 && getIdField().length() == 4) {
-                    if(dataBaseCheck()){
+                    if (dataBaseCheck()) {
                         Alert alert1 = new Alert(Alert.AlertType.ERROR);
                         alert1.setTitle("ERROR");
                         alert1.setContentText("Check the input for duplicate value!");
                         alert1.setHeaderText("SOMETHING WRONG");
                         alert1.show();
-                    } else{
+                    } else {
                         PreparedStatement prepStat = connect.getPrepStat("INSERT INTO brand VALUES(?, ?)");
                         prepStat.setString(1, getIdField());
                         prepStat.setString(2, getBrandField());
@@ -77,14 +77,14 @@ public class BrandController implements Initializable {
         }
     }
 
-    public void clearField(){
+    public void clearField() {
         brandField.setText("");
         idField.setText("");
     }
 
-    public boolean dataBaseCheck(){
-        PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM brand WHERE ID='" + getIdField() +"'");
-        PreparedStatement prepStat2 = connect.getPrepStat("SELECT * FROM brand WHERE Brand='" + getBrandField() +"'");
+    public boolean dataBaseCheck() {
+        PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM brand WHERE ID='" + getIdField() + "'");
+        PreparedStatement prepStat2 = connect.getPrepStat("SELECT * FROM brand WHERE Brand='" + getBrandField() + "'");
         try {
             ResultSet rs = prepStat.executeQuery();
             ResultSet rs2 = prepStat2.executeQuery();
@@ -118,8 +118,8 @@ public class BrandController implements Initializable {
         brandField.setText(Brand);
     }
 
-    public boolean isUsed(){
-        PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM product WHERE Brand='" + getBrandField() +"'");
+    public boolean isUsed() {
+        PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM product WHERE Brand='" + getBrandField() + "'");
         try {
             ResultSet rs = prepStat.executeQuery();
             return rs.next();
@@ -130,14 +130,14 @@ public class BrandController implements Initializable {
         }
     }
 
-    public void deleteButton(){
-        if(isUsed()){
+    public void deleteButton() {
+        if (isUsed()) {
             Alert alert1 = new Alert(Alert.AlertType.WARNING);
             alert1.setTitle("WARNING");
             alert1.setContentText("The data that you want to delete is currently in use!");
             alert1.setHeaderText("CANNOT DELETE THIS DATA");
             alert1.show();
-        } else{
+        } else {
             deleteBrand();
         }
 

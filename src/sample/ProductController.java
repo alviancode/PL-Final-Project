@@ -17,7 +17,8 @@ public class ProductController implements Initializable {
     Connection connect = new Connection();
     public TextField prodField, priceField, qtyField, barcodeField;
     public TextArea descArea;
-    public ComboBox catCombo, brandCombo;
+    public ComboBox<String> catCombo;
+    public ComboBox<String> brandCombo;
     public Button addButton, delButton;
     ObservableList<ModelTableProd> oblist = FXCollections.observableArrayList();
 
@@ -26,13 +27,11 @@ public class ProductController implements Initializable {
 
 
     public String getCatCombo() {
-        String catComboValue = (String) catCombo.getValue();
-        return catComboValue;
+        return catCombo.getValue();
     }
 
     public String getBrandCombo() {
-        String brandComboValue = (String) brandCombo.getValue();
-        return brandComboValue;
+        return brandCombo.getValue();
     }
 
     public String getProd() {
@@ -89,6 +88,7 @@ public class ProductController implements Initializable {
             prepStat.setString(6, getRetailPrice());
             prepStat.setString(7, getBarcode());
             prepStat.executeUpdate();
+
             Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
             alert1.setTitle("Info");
             alert1.setContentText("CHANGE SAVED");
@@ -119,7 +119,7 @@ public class ProductController implements Initializable {
             a.show();
         } else {
             getRetailPrice();
-            if (getProd().length() <= 15 & getBarcode().length() == 4 && getDesc().length() <= 255 &&
+            if (getProd().length() <= 30 & getBarcode().length() == 4 && getDesc().length() <= 255 &&
                     getQty().length() <= 255 && getRetailPrice().length() <= 255) {
                 if (dataBaseCheck()) {
                     Alert alert1 = new Alert(Alert.AlertType.ERROR);
@@ -196,8 +196,8 @@ public class ProductController implements Initializable {
             prepStat.setString(5, getQty());
             prepStat.setString(6, getRetailPrice());
             prepStat.setString(7, getBarcode());
-
             prepStat.executeUpdate();
+
             Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
             alert1.setTitle("Info");
             alert1.setContentText("Success add new category!");
@@ -258,43 +258,42 @@ public class ProductController implements Initializable {
     public void initialize(URL location, ResourceBundle resource) {
         showTable();
 
-        TableColumn prodCol = new TableColumn("Product");
+        TableColumn<ModelTableProd, String> prodCol = new TableColumn<ModelTableProd, String>("Product");
         prodCol.setMinWidth(100);
         prodCol.setCellValueFactory(
                 new PropertyValueFactory<ModelTableProd, String>("product"));
 
-        TableColumn descCol = new TableColumn("Description");
+        TableColumn<ModelTableProd, String> descCol = new TableColumn<>("Description");
         descCol.setMinWidth(180);
         descCol.setCellValueFactory(
                 new PropertyValueFactory<ModelTableProd, String>("desc"));
 
-        TableColumn catCol = new TableColumn("Category");
+        TableColumn<ModelTableProd, String> catCol = new TableColumn<>("Category");
         catCol.setMinWidth(100);
         catCol.setCellValueFactory(
                 new PropertyValueFactory<ModelTableProd, String>("category"));
 
-        TableColumn brandCol = new TableColumn("Brand");
+        TableColumn<ModelTableProd, String> brandCol = new TableColumn<ModelTableProd, String>("Brand");
         brandCol.setMinWidth(100);
         brandCol.setCellValueFactory(
                 new PropertyValueFactory<ModelTableProd, String>("brand"));
 
-        TableColumn priceCol = new TableColumn("Price");
+        TableColumn<ModelTableProd, String> priceCol = new TableColumn<>("Price");
         priceCol.setMinWidth(100);
         priceCol.setCellValueFactory(
                 new PropertyValueFactory<ModelTableProd, String>("price"));
 
-        TableColumn qtyCol = new TableColumn("Qty");
+        TableColumn<ModelTableProd, String> qtyCol = new TableColumn<ModelTableProd, String>("Qty");
         qtyCol.setMinWidth(50);
         qtyCol.setCellValueFactory(
                 new PropertyValueFactory<ModelTableProd, String>("qty"));
 
-        TableColumn barcodeCol = new TableColumn("Barcode");
+        TableColumn<ModelTableProd, String> barcodeCol = new TableColumn<ModelTableProd, String>("Barcode");
         barcodeCol.setMinWidth(100);
         barcodeCol.setCellValueFactory(
                 new PropertyValueFactory<ModelTableProd, String>("barcode"));
 
         prodTable.setItems(oblist);
         prodTable.getColumns().addAll(prodCol, descCol, catCol, brandCol, qtyCol, priceCol, barcodeCol);
-
     }
 }

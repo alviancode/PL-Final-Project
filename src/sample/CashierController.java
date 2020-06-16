@@ -47,14 +47,6 @@ public class CashierController extends ProductController implements Initializabl
         return qtyField.getText();
     }
 
-    public String getTotalField() {
-        return totalField.getText();
-    }
-
-    public String getChangeField() {
-        return changeField.getText();
-    }
-
     public String getPayField() {
         return payField.getText();
     }
@@ -120,6 +112,7 @@ public class CashierController extends ProductController implements Initializabl
         } catch (IOException e) {
             e.printStackTrace();
         }
+        assert root != null;
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setScene(scene);
@@ -226,38 +219,6 @@ public class CashierController extends ProductController implements Initializabl
         id++;
     }
 
-
-    @Override
-    public void initialize(URL location, ResourceBundle resource) {
-        delButton.setDisable(true);
-        clearDB2();
-        disableField();
-        idReset();
-        TableColumn idCol = new TableColumn("ID");
-        idCol.setMinWidth(30);
-        idCol.setCellValueFactory(
-                new PropertyValueFactory<ModelTableCashier, String>("id"));
-        TableColumn barcodeCol = new TableColumn("Barcode");
-        barcodeCol.setMinWidth(50);
-        barcodeCol.setCellValueFactory(
-                new PropertyValueFactory<ModelTableCashier, String>("barcode"));
-        TableColumn prodCol = new TableColumn("Product");
-        prodCol.setMinWidth(200);
-        prodCol.setCellValueFactory(
-                new PropertyValueFactory<ModelTableCashier, String>("product"));
-        TableColumn qtyCol = new TableColumn("Qty");
-        qtyCol.setMinWidth(100);
-        qtyCol.setCellValueFactory(
-                new PropertyValueFactory<ModelTableCashier, String>("qty"));
-        TableColumn totalCol = new TableColumn("Total");
-        totalCol.setMinWidth(200);
-        totalCol.setCellValueFactory(
-                new PropertyValueFactory<ModelTableCashier, String>("total"));
-        cashierTable.setItems(oblist);
-        cashierTable.getColumns().addAll(idCol, barcodeCol, prodCol, qtyCol, totalCol);
-
-    }
-
     public void showTable() {
         try {
             PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM cashier");
@@ -325,4 +286,34 @@ public class CashierController extends ProductController implements Initializabl
         }
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resource) {
+        delButton.setDisable(true);
+        clearDB2();
+        disableField();
+        idReset();
+        TableColumn idCol = new TableColumn("ID");
+        idCol.setMinWidth(30);
+        idCol.setCellValueFactory(
+                new PropertyValueFactory<ModelTableCashier, String>("id"));
+        TableColumn barcodeCol = new TableColumn("Barcode");
+        barcodeCol.setMinWidth(50);
+        barcodeCol.setCellValueFactory(
+                new PropertyValueFactory<ModelTableCashier, String>("barcode"));
+        TableColumn prodCol = new TableColumn("Product");
+        prodCol.setMinWidth(200);
+        prodCol.setCellValueFactory(
+                new PropertyValueFactory<ModelTableCashier, String>("product"));
+        TableColumn qtyCol = new TableColumn("Qty");
+        qtyCol.setMinWidth(100);
+        qtyCol.setCellValueFactory(
+                new PropertyValueFactory<ModelTableCashier, String>("qty"));
+        TableColumn totalCol = new TableColumn("Total");
+        totalCol.setMinWidth(200);
+        totalCol.setCellValueFactory(
+                new PropertyValueFactory<ModelTableCashier, String>("total"));
+        cashierTable.setItems(oblist);
+        cashierTable.getColumns().addAll(idCol, barcodeCol, prodCol, qtyCol, totalCol);
+
+    }
 }

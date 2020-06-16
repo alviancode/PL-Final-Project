@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -74,11 +75,6 @@ public class CategoryController implements Initializable {
         }
     }
 
-    public void clearField() {
-        catField.setText("");
-        idField.setText("");
-    }
-
     public boolean dataBaseCheck() {
         PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM category WHERE ID='" + getIdField() + "'");
         PreparedStatement prepStat2 = connect.getPrepStat("SELECT * FROM category WHERE Category='" + getCatField() + "'");
@@ -115,8 +111,8 @@ public class CategoryController implements Initializable {
         catField.setText(Category);
     }
 
-    public boolean isUsed(){
-        PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM product WHERE Category'" + getCatField() +"'");
+    public boolean isUsed() {
+        PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM product WHERE Category'" + getCatField() + "'");
         try {
             ResultSet rs = prepStat.executeQuery();
             return rs.next();
@@ -127,15 +123,18 @@ public class CategoryController implements Initializable {
         }
     }
 
-    public void deleteButton(){
-        if(isUsed()){
+    public void deleteButton() {
+        if (isUsed()) {
             Alert alert1 = new Alert(Alert.AlertType.WARNING);
             alert1.setTitle("WARNING");
             alert1.setContentText("The data that you want to delete is currently in use!");
             alert1.setHeaderText("CANNOT DELETE THIS DATA");
             alert1.show();
-        } else{
+        } else {
             deleteCategory();
+            clearField();
+            catTable.getItems().clear();
+            showTable();
         }
     }
 
@@ -150,9 +149,6 @@ public class CategoryController implements Initializable {
                 PreparedStatement prepStat = connect.getPrepStat("DELETE FROM category WHERE ID = ?");
                 prepStat.setString(1, ID);
                 prepStat.executeUpdate();
-                clearField();
-                catTable.getItems().clear();
-                showTable();
             } else {
                 alert4.close();
             }
@@ -160,6 +156,11 @@ public class CategoryController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void clearField() {
+        catField.setText("");
+        idField.setText("");
     }
 
     @Override
@@ -177,7 +178,5 @@ public class CategoryController implements Initializable {
                 new PropertyValueFactory<ModelTableCat, String>("category"));
         catTable.setItems(oblist);
         catTable.getColumns().addAll(idCol, catCol);
-
     }
-
 }
