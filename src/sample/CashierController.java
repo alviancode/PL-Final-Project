@@ -18,15 +18,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class CashierController extends ProductController implements Initializable {
+public class CashierController implements Initializable {
     Connection connect = new Connection();
     public TextField barcodeField, prodField, priceField, qtyField, totalField, changeField, payField;
     public Button addButton, delButton;
     ObservableList<ModelTableCashier> oblist = FXCollections.observableArrayList();
     int ID;
-    int id;
-    long subTotal = 0;
-    long change = 0;
+    long subTotal;
+    long change;
 
     @FXML
     private TableView<ModelTableCashier> cashierTable;
@@ -91,7 +90,7 @@ public class CashierController extends ProductController implements Initializabl
         if (Integer.parseInt(getPayField()) >= Integer.parseInt(totalField.getText())) {
             calculateChange();
             receipt();
-            clearDB2();
+            clearDB();
             totalField.setText("");
             payField.setText("");
             cashierTable.getItems().clear();
@@ -141,7 +140,6 @@ public class CashierController extends ProductController implements Initializabl
                 } else {
                     prepStat2.setString(1, String.valueOf(availableQty - Integer.parseInt(getQtyField())));
                     prepStat2.executeUpdate();
-                    idGenerator();
                     addToDB();
                 }
             }
@@ -152,12 +150,11 @@ public class CashierController extends ProductController implements Initializabl
 
     public void addToDB() {
         try {
-            PreparedStatement prepStat = connect.getPrepStat("INSERT INTO cashier VALUES(?, ?, ?, ?, ?)");
-            prepStat.setString(1, Integer.toString(id));
-            prepStat.setString(2, getBarcodeField());
-            prepStat.setString(3, getProdField());
-            prepStat.setString(4, getQtyField());
-            prepStat.setString(5, String.valueOf(Integer.parseInt(getPriceField()) * Integer.parseInt(getQtyField())));
+            PreparedStatement prepStat = connect.getPrepStat("INSERT INTO cashier(Barcode, Product, Quantity, Total)" + "VALUES(?, ?, ?, ?)");
+            prepStat.setString(1, getBarcodeField());
+            prepStat.setString(2, getProdField());
+            prepStat.setString(3, getQtyField());
+            prepStat.setString(4, String.valueOf(Integer.parseInt(getPriceField()) * Integer.parseInt(getQtyField())));
             prepStat.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -180,19 +177,6 @@ public class CashierController extends ProductController implements Initializabl
         delButton.setDisable(true);
     }
 
-    public void clearDB2() {
-        try {
-            PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM cashier");
-            ResultSet rs = prepStat.executeQuery();
-            while (rs.next()) {
-                clearDB(rs.getString("ID"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     public void clearField() {
         barcodeField.setText("");
         prodField.setText("");
@@ -200,23 +184,13 @@ public class CashierController extends ProductController implements Initializabl
         qtyField.setText("");
     }
 
-
-    public void clearDB(String temp) {
+    public void clearDB() {
         try {
-            PreparedStatement prepStat = connect.getPrepStat("DELETE FROM cashier WHERE ID = ?");
-            prepStat.setString(1, temp);
+            PreparedStatement prepStat = connect.getPrepStat("TRUNCATE cashier");
             prepStat.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    public void idReset() {
-        id = 0;
-    }
-
-    public void idGenerator() {
-        id++;
     }
 
     public void showTable() {
@@ -230,13 +204,6 @@ public class CashierController extends ProductController implements Initializabl
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    public void disableField() {
-        prodField.setEditable(false);
-        priceField.setEditable(false);
-        totalField.setEditable(false);
-        changeField.setEditable(false);
     }
 
     public void getVal() {
@@ -253,19 +220,20 @@ public class CashierController extends ProductController implements Initializabl
         }
     }
 
-    public void deleteItem() {
+    public void deleteButton() {
         try {
             addButton.setDisable(false);
-            updateQtyCancel();
-            cashierTable.getItems().clear();
-            showTable();
-            clearField();
 
             PreparedStatement prepStat = connect.getPrepStat("DELETE FROM cashier WHERE ID = ?");
             prepStat.setString(1, String.valueOf(ID));
             prepStat.executeUpdate();
             delButton.setDisable(true);
             calculateSubTotal();
+
+            updateQtyCancel();
+            cashierTable.getItems().clear();
+            showTable();
+            clearField();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -288,10 +256,9 @@ public class CashierController extends ProductController implements Initializabl
 
     @Override
     public void initialize(URL location, ResourceBundle resource) {
-        delButton.setDisable(true);
-        clearDB2();
-        disableField();
-        idReset();
+        calculateSubTotal();
+        showTable();
+
         TableColumn idCol = new TableColumn("ID");
         idCol.setMinWidth(30);
         idCol.setCellValueFactory(

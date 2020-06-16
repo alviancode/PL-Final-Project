@@ -258,37 +258,37 @@ public class ProductController implements Initializable {
     public void initialize(URL location, ResourceBundle resource) {
         showTable();
 
-        TableColumn<ModelTableProd, String> prodCol = new TableColumn<ModelTableProd, String>("Product");
+        TableColumn prodCol = new TableColumn("Product");
         prodCol.setMinWidth(100);
         prodCol.setCellValueFactory(
                 new PropertyValueFactory<ModelTableProd, String>("product"));
 
-        TableColumn<ModelTableProd, String> descCol = new TableColumn<>("Description");
+        TableColumn descCol = new TableColumn("Description");
         descCol.setMinWidth(180);
         descCol.setCellValueFactory(
                 new PropertyValueFactory<ModelTableProd, String>("desc"));
 
-        TableColumn<ModelTableProd, String> catCol = new TableColumn<>("Category");
+        TableColumn catCol = new TableColumn("Category");
         catCol.setMinWidth(100);
         catCol.setCellValueFactory(
                 new PropertyValueFactory<ModelTableProd, String>("category"));
 
-        TableColumn<ModelTableProd, String> brandCol = new TableColumn<ModelTableProd, String>("Brand");
+        TableColumn brandCol = new TableColumn("Brand");
         brandCol.setMinWidth(100);
         brandCol.setCellValueFactory(
                 new PropertyValueFactory<ModelTableProd, String>("brand"));
 
-        TableColumn<ModelTableProd, String> priceCol = new TableColumn<>("Price");
+        TableColumn priceCol = new TableColumn("Price");
         priceCol.setMinWidth(100);
         priceCol.setCellValueFactory(
                 new PropertyValueFactory<ModelTableProd, String>("price"));
 
-        TableColumn<ModelTableProd, String> qtyCol = new TableColumn<ModelTableProd, String>("Qty");
+        TableColumn qtyCol = new TableColumn("Qty");
         qtyCol.setMinWidth(50);
         qtyCol.setCellValueFactory(
                 new PropertyValueFactory<ModelTableProd, String>("qty"));
 
-        TableColumn<ModelTableProd, String> barcodeCol = new TableColumn<ModelTableProd, String>("Barcode");
+        TableColumn barcodeCol = new TableColumn("Barcode");
         barcodeCol.setMinWidth(100);
         barcodeCol.setCellValueFactory(
                 new PropertyValueFactory<ModelTableProd, String>("barcode"));
