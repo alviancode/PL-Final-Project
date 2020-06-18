@@ -8,6 +8,8 @@ public class Connection {
     private String password = "AlvianWijaya";
     public java.sql.Connection connection = null;
 
+
+    // Class constructor of Connection class
     public Connection() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -19,6 +21,8 @@ public class Connection {
         }
     }
 
+
+    // Function that return prepStat
     public PreparedStatement getPrepStat(String query) {
         try {
             PreparedStatement prepStat = connection.prepareStatement(query);
@@ -27,6 +31,18 @@ public class Connection {
             e.printStackTrace();
         }
         return null;
+    }
+
+
+    // Function that return value of username
+    public String getUsername() {
+        return username;
+    }
+
+
+    // Function that return value of username
+    public String getPassword() {
+        return password;
     }
 
 }

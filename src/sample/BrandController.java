@@ -15,34 +15,46 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class BrandController implements Initializable {
-    String ID = "";
+
     Connection connect = new Connection();
+
     public TextField brandField, idField;
     public Button addButton, delButton;
+
     ObservableList<ModelTableBrand> oblist = FXCollections.observableArrayList();
+
+    String ID = "";
+
 
     @FXML
     private TableView<ModelTableBrand> brandTable;
 
 
+    // Function that return value of brandField textfield
     public String getBrandField() {
         return brandField.getText();
     }
 
+    // Function that return value of idField textfield
     public String getIdField() {
         return idField.getText();
     }
 
+
+    // addButton function
     public void addButton() {
         try {
+
+            // Check if all input is already filled
+            // If not, it will show a pop up message
             if (getBrandField().isEmpty() || getIdField().isEmpty()) {
                 Alert a = new Alert(Alert.AlertType.WARNING);
                 a.setTitle("Warning");
                 a.setContentText("All Data Must be Filled!");
                 a.show();
-
             } else {
 
+                // Validate user input
                 if (getBrandField().length() <= 15 && getIdField().length() == 4) {
                     if (dataBaseCheck()) {
                         Alert alert1 = new Alert(Alert.AlertType.ERROR);
@@ -77,11 +89,16 @@ public class BrandController implements Initializable {
         }
     }
 
+
+    // Function that clear value
     public void clearField() {
         brandField.setText("");
         idField.setText("");
     }
 
+
+    // Function to check the database if data is already inside
+    // If yes, it will return true
     public boolean dataBaseCheck() {
         PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM brand WHERE ID='" + getIdField() + "'");
         PreparedStatement prepStat2 = connect.getPrepStat("SELECT * FROM brand WHERE Brand='" + getBrandField() + "'");
@@ -97,6 +114,8 @@ public class BrandController implements Initializable {
 
     }
 
+
+    // Function that filled the table
     public void showTable() {
         try {
             PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM brand");
@@ -110,6 +129,9 @@ public class BrandController implements Initializable {
         }
     }
 
+
+    // Function that get value from the table
+    // from the selected row
     public void getVal() {
         ModelTableBrand brand = brandTable.getSelectionModel().getSelectedItem();
         ID = brand.getId();
@@ -118,6 +140,9 @@ public class BrandController implements Initializable {
         brandField.setText(Brand);
     }
 
+
+    // Function that check if data being in used
+    // If yes, it will return true
     public boolean isUsed() {
         PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM product WHERE Brand='" + getBrandField() + "'");
         try {
@@ -130,7 +155,12 @@ public class BrandController implements Initializable {
         }
     }
 
+
+    // Function to delete data
     public void deleteButton() {
+
+        // If isUsed() function return true
+        // it will show a pop up message and not delete the data from database
         if (isUsed()) {
             Alert alert1 = new Alert(Alert.AlertType.WARNING);
             alert1.setTitle("WARNING");
@@ -146,6 +176,8 @@ public class BrandController implements Initializable {
         showTable();
     }
 
+
+    // Function that delete brand from database
     public void deleteBrand() {
         try {
             Alert alert4 = new Alert(Alert.AlertType.CONFIRMATION);
@@ -166,6 +198,8 @@ public class BrandController implements Initializable {
         }
     }
 
+
+    // Initialize function
     @Override
     public void initialize(URL location, ResourceBundle resource) {
         showTable();

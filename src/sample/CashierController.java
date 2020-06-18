@@ -18,44 +18,70 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+
+// CashierController class which implements interface Initializable
 public class CashierController implements Initializable {
+
     Connection connect = new Connection();
+
     public TextField barcodeField, prodField, priceField, qtyField, totalField, changeField, payField;
     public Button addButton, delButton;
+
     ObservableList<ModelTableCashier> oblist = FXCollections.observableArrayList();
+
     int ID;
-    long subTotal;
-    long change;
+    long subTotal, change;
+
 
     @FXML
     private TableView<ModelTableCashier> cashierTable;
 
+
+    // Function that return value of barcodeField textfield
     public String getBarcodeField() {
         return barcodeField.getText();
     }
 
+    // Function that return value of prodField textfield
     public String getProdField() {
         return prodField.getText();
     }
 
+    // Function that return value of priceField textfield
     public String getPriceField() {
         return priceField.getText();
     }
 
+    // Function that return value of qtyField textfield
     public String getQtyField() {
         return qtyField.getText();
     }
 
+    // Function that return value of payField textfield
     public String getPayField() {
         return payField.getText();
     }
 
+    // Function that return value of changeField textfield
+    public String getChange() {
+        return changeField.getText();
+    }
 
+    // Function that return value of payField textfield
+    public String getPay() {
+        return payField.getText();
+    }
+
+
+    // Function that search the product from database
+    // If product barcode not found, it will show a pop up message
     public void productSearch() {
         PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM product WHERE Barcode='" + getBarcodeField() + "'");
         try {
             ResultSet rs = prepStat.executeQuery();
             if (!rs.next()) {
+
+                // Alert show product not found
                 Alert alert1 = new Alert(Alert.AlertType.ERROR);
                 alert1.setTitle("ERROR");
                 alert1.setContentText("Barcode Not Found!");
@@ -64,6 +90,8 @@ public class CashierController implements Initializable {
             } else {
                 String productName = rs.getString("Product");
                 String price = rs.getString("RetailPrice");
+
+                // Set prodField and priceField value from database
                 prodField.setText(productName.trim());
                 priceField.setText(price.trim());
             }
@@ -72,20 +100,29 @@ public class CashierController implements Initializable {
         }
     }
 
+
+    // Function that calculate subTotal
     public void calculateSubTotal() {
         subTotal = 0;
         PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM cashier");
         try {
             ResultSet rs = prepStat.executeQuery();
             while (rs.next()) {
+
+                // Get data from database
+                // Add it to subTotal until all product is summed
                 subTotal += rs.getInt("Total");
             }
+
+            // Set the totalField value to subTotal value
             totalField.setText(String.valueOf(subTotal));
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+
+    // PayInvoiceButton function
     public void payInvoiceButton() {
         if (Integer.parseInt(getPayField()) >= Integer.parseInt(totalField.getText())) {
             calculateChange();
@@ -96,6 +133,9 @@ public class CashierController implements Initializable {
             cashierTable.getItems().clear();
             showTable();
         } else {
+
+            // If user input payment is smaller than total price amount
+            // It will show pop up message
             Alert alert1 = new Alert(Alert.AlertType.ERROR);
             alert1.setTitle("ERROR");
             alert1.setContentText("Pay Amount cannot smaller than total");
@@ -104,6 +144,8 @@ public class CashierController implements Initializable {
         }
     }
 
+
+    // Function that call and show receipt window
     public void receipt() {
         Parent root = null;
         try {
@@ -118,12 +160,18 @@ public class CashierController implements Initializable {
         stage.show();
     }
 
+
+    // Function to calculate change
     public void calculateChange() {
         change = 0;
         change = Integer.parseInt(getPayField()) - Integer.parseInt(totalField.getText());
+
+        // Set changeField value to change value
         changeField.setText(String.valueOf(change));
     }
 
+
+    // Function that update the value in inventory system
     public void updateCheckQty() {
         try {
             PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM product WHERE Barcode='" + getBarcodeField() + "'");
@@ -131,6 +179,8 @@ public class CashierController implements Initializable {
             ResultSet rs = prepStat.executeQuery();
             while (rs.next()) {
                 int availableQty = rs.getInt("Qty");
+                // If user request qty more than available qty
+                // It will show pop up message
                 if (Integer.parseInt(getQtyField()) > availableQty) {
                     Alert alert1 = new Alert(Alert.AlertType.ERROR);
                     alert1.setTitle("ERROR");
@@ -138,6 +188,7 @@ public class CashierController implements Initializable {
                     alert1.setHeaderText("QUANTITY IS NOT ENOUGH!");
                     alert1.show();
                 } else {
+                    // Subtract the value of qty in inventory system by requested qty
                     prepStat2.setString(1, String.valueOf(availableQty - Integer.parseInt(getQtyField())));
                     prepStat2.executeUpdate();
                     addToDB();
@@ -148,6 +199,8 @@ public class CashierController implements Initializable {
         }
     }
 
+
+    // Function that add new "product" to cashier table in database
     public void addToDB() {
         try {
             PreparedStatement prepStat = connect.getPrepStat("INSERT INTO cashier(Barcode, Product, Quantity, Total)" + "VALUES(?, ?, ?, ?)");
@@ -161,8 +214,14 @@ public class CashierController implements Initializable {
         }
     }
 
+
+    // Function addButton
     public void addButton() {
+
+        // Validate if user already input all the necesary data
         if (getBarcodeField().isEmpty() || getQtyField().isEmpty()) {
+
+            // Show pop up message
             Alert a = new Alert(Alert.AlertType.WARNING);
             a.setTitle("Warning");
             a.setContentText("All Data Must be Filled!");
@@ -177,6 +236,8 @@ public class CashierController implements Initializable {
         delButton.setDisable(true);
     }
 
+
+    // Function that remove all textfield value
     public void clearField() {
         barcodeField.setText("");
         prodField.setText("");
@@ -184,6 +245,8 @@ public class CashierController implements Initializable {
         qtyField.setText("");
     }
 
+
+    // Function that clear database table
     public void clearDB() {
         try {
             PreparedStatement prepStat = connect.getPrepStat("TRUNCATE cashier");
@@ -193,6 +256,8 @@ public class CashierController implements Initializable {
         }
     }
 
+
+    // Function that fill cashierTable
     public void showTable() {
         try {
             PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM cashier");
@@ -206,6 +271,8 @@ public class CashierController implements Initializable {
         }
     }
 
+
+    // Function that set value of textfield if user select one of the item inside the table
     public void getVal() {
         try {
             addButton.setDisable(true);
@@ -220,6 +287,8 @@ public class CashierController implements Initializable {
         }
     }
 
+
+    // Function deleteButton
     public void deleteButton() {
         try {
             addButton.setDisable(false);
@@ -239,6 +308,8 @@ public class CashierController implements Initializable {
         }
     }
 
+
+    // If user remove "product" from "cart"
     public void updateQtyCancel() {
         try {
             PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM product WHERE Barcode='" + getBarcodeField() + "'");
@@ -254,11 +325,14 @@ public class CashierController implements Initializable {
         }
     }
 
+
+    // Initalize Function
     @Override
     public void initialize(URL location, ResourceBundle resource) {
         calculateSubTotal();
         showTable();
 
+        // Create neccesary table coloumn
         TableColumn idCol = new TableColumn("ID");
         idCol.setMinWidth(30);
         idCol.setCellValueFactory(

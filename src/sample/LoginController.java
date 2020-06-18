@@ -11,16 +11,20 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class LoginController {
+// Login class which extends Connection class
+public class LoginController extends Connection {
+
     public TextField usernameField;
     public PasswordField passwordField;
     public Button loginButton;
     public Label warningLabel;
 
 
+    // Login button function
     public void loginButton() {
 
-        if (usernameField.getText().equals("admin") && passwordField.getText().equals("Admin")) {
+        // Check if user input a correct credential
+        if (usernameField.getText().equals(getUsername()) && passwordField.getText().equals(getPassword())) {
             Parent root = null;
             try {
                 root = FXMLLoader.load(getClass().getResource("tabPane.fxml"));
@@ -35,6 +39,9 @@ public class LoginController {
             Stage closeWindow = (Stage) loginButton.getScene().getWindow();
             closeWindow.close();
             warningLabel.setVisible(false);
+
+            // If not correct
+            // It will show a message to the user
         } else {
             warningLabel.setVisible(true);
         }

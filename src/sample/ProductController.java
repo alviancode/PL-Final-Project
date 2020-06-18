@@ -26,22 +26,28 @@ public class ProductController implements Initializable {
     private TableView<ModelTableProd> prodTable;
 
 
+    // Function that return value of catCombo combobox
     public String getCatCombo() {
         return catCombo.getValue();
     }
 
+    // Function that return value of brandCombo combobox
     public String getBrandCombo() {
         return brandCombo.getValue();
     }
 
+    // Function that return value of prodField textfield
     public String getProd() {
         return prodField.getText();
     }
 
+    // Function that return value of deascArea textarea
     public String getDesc() {
         return descArea.getText();
     }
 
+
+    // Function that return value of qtyField textfield
     public String getQty() {
         try {
             Integer.parseInt(qtyField.getText());
@@ -51,6 +57,8 @@ public class ProductController implements Initializable {
         }
     }
 
+
+    // Function that return value of priceField textfield
     public String getRetailPrice() {
         try {
             Integer.parseInt(priceField.getText());
@@ -60,10 +68,14 @@ public class ProductController implements Initializable {
         }
     }
 
+
+    // Function that return value of barcodeField textfield
     public String getBarcode() {
         return barcodeField.getText();
     }
 
+
+    // Function that fill prodTable
     public void showTable() {
         try {
             PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM product");
@@ -77,6 +89,9 @@ public class ProductController implements Initializable {
         }
     }
 
+
+    // editButton function
+    // This function is used to update the values of the product in database
     public void editButton() {
         PreparedStatement prepStat = connect.getPrepStat("UPDATE product SET Product = ?, Description = ?, Category = ?, Brand = ?, Qty = ?, RetailPrice = ?, Barcode = ?  WHERE Barcode = '" + getBarcode() + "'");
         try {
@@ -89,6 +104,7 @@ public class ProductController implements Initializable {
             prepStat.setString(7, getBarcode());
             prepStat.executeUpdate();
 
+            // Pop up a message
             Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
             alert1.setTitle("Info");
             alert1.setContentText("CHANGE SAVED");
@@ -102,6 +118,8 @@ public class ProductController implements Initializable {
         }
     }
 
+
+    // This function is used to refresh data inside table
     public void refreshButton() {
         barcodeField.setEditable(true);
         clearField();
@@ -110,7 +128,11 @@ public class ProductController implements Initializable {
     }
 
 
+    // addButton Function
     public void addButton() {
+
+        // Check if the user already filled all of input
+        // If it return true, it will show a pop up message
         if (getProd().isEmpty() || getCatCombo() == null || getBrandCombo() == null || getBarcode().isEmpty() ||
                 getDesc().isEmpty() || getQty().isEmpty() || getRetailPrice().isEmpty()) {
             Alert a = new Alert(Alert.AlertType.WARNING);
@@ -119,14 +141,22 @@ public class ProductController implements Initializable {
             a.show();
         } else {
             getRetailPrice();
+
+            // Check the user for appropriate input
+            // If input is appropriate, it will show a pop up message
             if (getProd().length() <= 30 & getBarcode().length() == 4 && getDesc().length() <= 255 &&
                     getQty().length() <= 255 && getRetailPrice().length() <= 255) {
+
+                // Check if data is already in database
+                // If yes, it will show a pop up message
                 if (dataBaseCheck()) {
                     Alert alert1 = new Alert(Alert.AlertType.ERROR);
                     alert1.setTitle("ERROR");
                     alert1.setContentText("Barcode cannot be repeated!");
                     alert1.setHeaderText("SOMETHING WRONG");
                     alert1.show();
+
+                    // If no, it will insert the data to database
                 } else {
                     setDB();
                     clearField();
@@ -143,6 +173,8 @@ public class ProductController implements Initializable {
         }
     }
 
+
+    // Function that control catCombo combobox
     public void catCombo() {
         try {
             PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM category");
@@ -158,6 +190,8 @@ public class ProductController implements Initializable {
 
     }
 
+
+    // Function that control brandCombo combobox
     public void brandCombo() {
         try {
             PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM brand");
@@ -174,6 +208,10 @@ public class ProductController implements Initializable {
 
     }
 
+
+    // Function that get value from the table
+    // and set value of all textfield, textarea,combobox
+    // to selected value
     public void getVal() {
         barcodeField.setEditable(false);
         ModelTableProd product = prodTable.getSelectionModel().getSelectedItem();
@@ -186,6 +224,8 @@ public class ProductController implements Initializable {
         barcodeField.setText(product.getBarcode());
     }
 
+
+    // Function that insert the data to database
     public void setDB() {
         try {
             PreparedStatement prepStat = connect.getPrepStat("INSERT INTO product VALUES(?, ?, ?, ?, ?, ?,?)");
@@ -209,6 +249,9 @@ public class ProductController implements Initializable {
         }
     }
 
+
+    // Function that check database if the data is already inside database
+    // If true, it will show a pop up message
     public boolean dataBaseCheck() {
         PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM product WHERE Barcode='" + getBarcode() + "'");
         try {
@@ -222,13 +265,18 @@ public class ProductController implements Initializable {
 
     }
 
+
+    // Function that delete product from database
     public void deleteProduct() {
         try {
+            // show confirmation of deletion
             Alert alert4 = new Alert(Alert.AlertType.CONFIRMATION);
             alert4.setTitle("Confirmation");
             alert4.setContentText("This will remove it permanently from the database.");
             alert4.setHeaderText("Are you sure want to delete this product?");
             Optional<ButtonType> result = alert4.showAndWait();
+
+            // If user press "OK" button
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 PreparedStatement prepStat = connect.getPrepStat("DELETE FROM product WHERE Barcode = ?");
                 prepStat.setString(1, getBarcode());
@@ -244,6 +292,8 @@ public class ProductController implements Initializable {
         }
     }
 
+
+    // Function that clear of textfield and textarea
     public void clearField() {
         prodField.setText("");
         priceField.setText("");
@@ -254,6 +304,8 @@ public class ProductController implements Initializable {
         brandCombo.setValue("");
     }
 
+
+    // Initialize function
     @Override
     public void initialize(URL location, ResourceBundle resource) {
         showTable();

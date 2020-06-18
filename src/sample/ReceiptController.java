@@ -10,16 +10,20 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class ReceiptController implements Initializable {
-    public TextArea receiptText;
-    String temp = "";
+
     Connection connect = new Connection();
 
-    public void showTable() {
+    public TextArea receiptText;
+
+    String temp = "";
+
+
+    public void showItems() {
         try {
             PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM cashier");
             ResultSet rs = prepStat.executeQuery();
             while (rs.next()) {
-                temp += rs.getString("ID") + ". " + rs.getString("Product") + "\n" + "    Qty: " + rs.getString("Quantity") +
+                temp += rs.getString("Product") + "\n" + "    Qty: " + rs.getString("Quantity") +
                         " ..................................................................... " + rs.getString("Total") + "\n";
             }
             receiptText.setText(
@@ -36,6 +40,6 @@ public class ReceiptController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        showTable();
+        showItems();
     }
 }
