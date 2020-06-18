@@ -29,8 +29,8 @@ public class CashierController implements Initializable {
 
     ObservableList<ModelTableCashier> oblist = FXCollections.observableArrayList();
 
-    int ID;
-    long subTotal, change;
+    public int ID;
+    public long subTotal, change;
 
 
     @FXML
