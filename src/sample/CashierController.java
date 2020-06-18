@@ -62,16 +62,6 @@ public class CashierController implements Initializable {
         return payField.getText();
     }
 
-    // Function that return value of changeField textfield
-    public String getChange() {
-        return changeField.getText();
-    }
-
-    // Function that return value of payField textfield
-    public String getPay() {
-        return payField.getText();
-    }
-
 
     // Function that search the product from database
     // If product barcode not found, it will show a pop up message
