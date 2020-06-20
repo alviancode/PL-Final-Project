@@ -1,7 +1,7 @@
 package sample;
 
 public class ModelTableProd {
-    String product, desc, category, brand, qty, price, barcode;
+    private String product, desc, category, brand, qty, price, barcode;
 
     public ModelTableProd(String product, String desc, String category, String brand, String qty, String price, String barcode) {
         this.product = product;

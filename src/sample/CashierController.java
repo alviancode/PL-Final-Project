@@ -33,6 +33,7 @@ public class CashierController implements Initializable {
     public long subTotal, change;
 
 
+    // CashierController class associated with ModelTableCashier class
     @FXML
     private TableView<ModelTableCashier> cashierTable;
 
@@ -161,7 +162,7 @@ public class CashierController implements Initializable {
     }
 
 
-    // Function that update the value in inventory system
+    // Function that update and check the value in inventory system database
     public void updateCheckQty() {
         try {
             PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM product WHERE Barcode='" + getBarcodeField() + "'");
@@ -322,7 +323,7 @@ public class CashierController implements Initializable {
         calculateSubTotal();
         showTable();
 
-        // Create neccesary table coloumn
+        // Create necessary table column
         TableColumn idCol = new TableColumn("ID");
         idCol.setMinWidth(30);
         idCol.setCellValueFactory(

@@ -22,6 +22,8 @@ public class ProductController implements Initializable {
     public Button addButton, delButton;
     ObservableList<ModelTableProd> oblist = FXCollections.observableArrayList();
 
+
+    // ProductController class associated with ModelTableProd class
     @FXML
     private TableView<ModelTableProd> prodTable;
 
@@ -310,6 +312,7 @@ public class ProductController implements Initializable {
     public void initialize(URL location, ResourceBundle resource) {
         showTable();
 
+        // Create necessary table column
         TableColumn prodCol = new TableColumn("Product");
         prodCol.setMinWidth(100);
         prodCol.setCellValueFactory(

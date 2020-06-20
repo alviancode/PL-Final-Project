@@ -26,6 +26,7 @@ public class BrandController implements Initializable {
     String ID = "";
 
 
+    // BrandController class associated with ModelTableBrand class
     @FXML
     private TableView<ModelTableBrand> brandTable;
 
@@ -69,7 +70,7 @@ public class BrandController implements Initializable {
                         prepStat.executeUpdate();
                         Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
                         alert1.setTitle("Info");
-                        alert1.setContentText("Success add new category!");
+                        alert1.setContentText("Success add new brand!");
                         alert1.setHeaderText("SUCCESS");
                         alert1.show();
                         clearField();
@@ -156,7 +157,7 @@ public class BrandController implements Initializable {
     }
 
 
-    // Function to delete data
+    // Function that "delButton" execute
     public void deleteButton() {
 
         // If isUsed() function return true
@@ -183,7 +184,7 @@ public class BrandController implements Initializable {
             Alert alert4 = new Alert(Alert.AlertType.CONFIRMATION);
             alert4.setTitle("Confirmation");
             alert4.setContentText("This will remove it permanently from the database.");
-            alert4.setHeaderText("Are you sure want to delete this category?");
+            alert4.setHeaderText("Are you sure want to delete this brand?");
             Optional<ButtonType> result = alert4.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 PreparedStatement prepStat = connect.getPrepStat("DELETE FROM brand WHERE ID = ?");

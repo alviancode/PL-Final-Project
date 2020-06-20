@@ -20,7 +20,7 @@ public class LoginController extends Connection {
     public Label warningLabel;
 
 
-    // Login button function
+    // Function that "loginButton" execute
     public void loginButton() {
 
         // Check if user input a correct credential

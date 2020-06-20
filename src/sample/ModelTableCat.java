@@ -1,7 +1,7 @@
 package sample;
 
 public class ModelTableCat {
-    String id, category;
+    private String id, category;
 
     public ModelTableCat(String id, String category) {
         this.id = id;

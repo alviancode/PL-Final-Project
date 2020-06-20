@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+
+// tabPaneController class which implements Initializable
 public class tabPaneController implements Initializable {
 
     @FXML
@@ -26,7 +28,7 @@ public class tabPaneController implements Initializable {
 
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize(URL url, ResourceBundle resource) {
 
         try {
             AnchorPane anch1 = FXMLLoader.load(getClass().getResource("Cashier.fxml"));

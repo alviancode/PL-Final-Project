@@ -25,9 +25,10 @@ public class CategoryController implements Initializable {
 
     ObservableList<ModelTableCat> oblist = FXCollections.observableArrayList();
 
-    String ID = "";
+    String ID;
 
 
+    // CategoryController class associated with ModelTableCat class
     @FXML
     private TableView<ModelTableCat> catTable;
 
@@ -165,7 +166,7 @@ public class CategoryController implements Initializable {
     }
 
 
-    // deleteButton function
+    // Function that "delButton" execute
     public void deleteButton() {
 
         // If isUsed() function return true

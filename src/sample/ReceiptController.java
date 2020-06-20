@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+
+// ReceiptController class which implements Initializable
 public class ReceiptController implements Initializable {
 
     Connection connect = new Connection();
@@ -18,6 +20,8 @@ public class ReceiptController implements Initializable {
     String temp = "";
 
 
+    // Function that print all items from database
+    // and print it to the "receipt"
     public void showItems() {
         try {
             PreparedStatement prepStat = connect.getPrepStat("SELECT * FROM cashier");
@@ -39,7 +43,7 @@ public class ReceiptController implements Initializable {
     }
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize(URL url, ResourceBundle resource) {
         showItems();
     }
 }
